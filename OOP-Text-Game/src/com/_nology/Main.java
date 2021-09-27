@@ -1,5 +1,6 @@
 package com._nology;
 
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,6 @@ import java.util.List;
 public class Main {
 
     //ANSI text colour escape codes
-    public static String ANSI_CYAN = "\u001B[36m";
     public static String ANSI_RESET = "\u001B[0m";
 
     public static void main(String[] args) throws IOException {
@@ -17,33 +17,30 @@ public class Main {
 
     //instantiating new quiz and player, receive name as user input and starting game
     public static void setupQuiz() throws IOException {
-        Quiz quiz = new Quiz();
-
-        String name = Utils.inputString(ANSI_CYAN + "Enter your name..." + ANSI_RESET);
+        String name = Utils.inputString("Enter your name...");
         Player player = new Player(name);
 
         printWelcomeMsg(player.getName());
-        askQuestions(quiz, player);
+        askQuestions(player);
     }
 
-    //print welcome message after user enters their name
+    //output welcome message after user enters their name using message box
     public static void printWelcomeMsg(String name) {
-        Utils.print(
-            Utils.lineBreak() +
-            "\nWelcome " + name +
+        Utils.messageBox(
+            "Welcome " + name +
             "! Answer the following questions..."
         );
     }
 
     //loop through to ask questions (light blue), receive answers and output score throughout
-    public static void askQuestions(Quiz quiz, Player player) throws IOException {
-        String[][] questions = quiz.getQuestions();
+    public static void askQuestions(Player player) throws IOException {
+        String[][] questions = player.getQuestions();
 
         for (int i=0; i<questions.length; i++) {
             String questionNumber = "\n" + (i + 1) + ") ";
 
             String inputAns = Utils.inputString(
-                ANSI_CYAN + questionNumber + questions[i][0] + ANSI_RESET
+                    "\u001B[36m" + questionNumber + questions[i][0] + ANSI_RESET
             );
 
             checkAnswer(inputAns, questions[i][1], player);

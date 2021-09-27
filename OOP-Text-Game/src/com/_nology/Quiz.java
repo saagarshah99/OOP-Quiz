@@ -15,8 +15,10 @@ public class Quiz {
         TODO: fetch questions from API later
             https://opentdb.com/api.php?amount=10
             https://medium.com/swlh/getting-json-data-from-a-restful-api-using-java-b327aafb3751
+
+        TODO: make this multiple choice by nested an array in the answer index
+            Or use array to accept multiple possible answers
     */
-    //TODO: make this multiple choice by nested an array in the answer index
     private String[][] generateQuestions() {
         return new String[][] {
             {
