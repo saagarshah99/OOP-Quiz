@@ -28,6 +28,11 @@ public class Utils {
         JOptionPane.showMessageDialog(null, str);
     }
 
+    //output input box prompting user to enter some data
+    public static String inputBox(String str) {
+        return JOptionPane.showInputDialog(str);
+    }
+
     //return a line break string for breaking out console output
     public static String lineBreak() {
         return "\n*****************************************************\n";

@@ -18,6 +18,9 @@ public class Quiz {
 
         TODO: make this multiple choice by nested an array in the answer index
             Or use array to accept multiple possible answers
+
+        TODO: could randomly generate array indexes and store them in an array to avoid duplicates
+         in order to select from a larger set of questions
     */
     private String[][] generateQuestions() {
         return new String[][] {
@@ -34,7 +37,8 @@ public class Quiz {
                 "What is isobutylphenylpropanoic acid more commonly known as?",
                 "Ibuprofen"
             },
-            {"What is the highest mountain in the world?", "Everest"}
+            {"What is the highest mountain in the world?", "Everest"},
+            {"How many people at _nology are left handed?", "2"}
         };
     }
 }

@@ -1,23 +1,18 @@
 package com._nology;
 
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-
-    //ANSI text colour escape codes
-    public static String ANSI_RESET = "\u001B[0m";
-
     public static void main(String[] args) throws IOException {
         setupQuiz();
     }
 
     //instantiating new quiz and player, receive name as user input and starting game
     public static void setupQuiz() throws IOException {
-        String name = Utils.inputString("Enter your name...");
+        String name = Utils.inputBox("Enter your name...");
         Player player = new Player(name);
 
         printWelcomeMsg(player.getName());
@@ -32,22 +27,19 @@ public class Main {
         );
     }
 
-    //loop through to ask questions (light blue), receive answers and output score throughout
+    //loop through to ask questions, receive answers and output score throughout
     public static void askQuestions(Player player) throws IOException {
         String[][] questions = player.getQuestions();
 
         for (int i=0; i<questions.length; i++) {
             String questionNumber = "\n" + (i + 1) + ") ";
-
-            String inputAns = Utils.inputString(
-                    "\u001B[36m" + questionNumber + questions[i][0] + ANSI_RESET
-            );
+            String inputAns = Utils.inputBox(questionNumber + questions[i][0]);
 
             checkAnswer(inputAns, questions[i][1], player);
         }
 
         updateScoreboard(player);
-        printFinalScore(player);
+        printScoreboard(player);
     }
 
     //determine correctness of current question and update/return score (add points if corrects)
@@ -62,43 +54,30 @@ public class Main {
         else generateFailMsg(player.getScoreStr(), answer);
     }
 
-    //output "random" green success message if given answer was correct (include score)
+    //output "random" success message if given answer was correct (include score)
     public static void generateSuccessMsg(int newPoints, String scoreStr) {
         String[] possibleMessages = {"Correct!", "Awesome!", "Sound as a pound!"};
         String chosenMsg = possibleMessages[Utils.randomNumber(0, possibleMessages.length)];
 
-        Utils.print(
-            "\u001B[32m" +
-            chosenMsg + " (+" + newPoints + " points) \n" + ANSI_RESET +
+        Utils.messageBox(
+            chosenMsg + " (+" + newPoints + " points) \n" +
             scoreStr
         );
     }
 
-    //output red message if given answer was incorrect (include score)
+    //output message if given answer was incorrect (include score)
     public static void generateFailMsg(String scoreStr, String answer) {
-        Utils.print(
-            "\u001B[31m" +
-            "Incorrect! The correct answer was '" + answer + ANSI_RESET +
+        Utils.messageBox(
+            "Incorrect! The correct answer was '" + answer +
             "'\n" + scoreStr
         );
     }
 
-    //output final score at end of quiz
-    public static void printFinalScore(Player player) throws IOException {
-        Utils.print(
-            Utils.lineBreak() +
-            "\nEnd of questions " + player.getName() + "..." +
-            "\nFinal " + player.getScoreStr()
-        );
+    //fetch updated scoreboard from file, loop through it and output it appropriately (end of quiz)
+    public static void printScoreboard(Player player) throws IOException {
+        String output = "\nSCOREBOARD:\n";
 
-        printScoreboard();
-    }
-
-    //fetch updated scoreboard from file, loop through it and output it appropriately
-    public static void printScoreboard() throws IOException {
-        Utils.print("\u001B[33m" + "\nSCOREBOARD:" + ANSI_RESET);
-
-        List<List<String>> scoreboard = getScoreboard();
+        List<List<String>> scoreboard = getScoreboard(); // [name, score]
         for (int i = 0; i < scoreboard.size(); i++)
         {
             String rowOutput = "";
@@ -107,18 +86,23 @@ public class Main {
                 String currentValue = scoreboard.get(i).get(j);
 
                 if(j == 0) {
-                    rowOutput = "Name: " + currentValue;
+                    rowOutput = currentValue + ": ";
 
-                    //make recent score stand out in purple
+                    //make recent score stand out
                     if(i == scoreboard.size()-1) {
-                        rowOutput += " (" + "\u001B[35m" + "You" + ANSI_RESET + ")";
+                        rowOutput = "\n" + currentValue + " (You): ";
                     }
                 }
-                else rowOutput += " --> " + currentValue + " points";
+                else rowOutput += currentValue + " points";
             }
 
-            Utils.print(rowOutput);
+            output += rowOutput + "\n";
         }
+
+        Utils.messageBox(
+                "\nEnd of questions " + player.getName() + "...\n" +
+                Utils.lineBreak() + output
+        );
     }
 
     //loading existing and new player score data into csv file
