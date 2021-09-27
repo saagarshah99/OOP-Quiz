@@ -1,7 +1,6 @@
 package com._nology;
 
 import java.util.Random;
-import java.util.Scanner;
 import javax.swing.*;
 
 public class Utils {
@@ -9,13 +8,6 @@ public class Utils {
     //generate random number within a given range
     public static int randomNumber(int min, int max) {
         return new Random().nextInt(max) + min;
-    }
-
-    //prompt user for input and return response as string
-    public static String inputString(String promptMsg) {
-        Scanner input = new Scanner(System.in);
-        print(promptMsg);
-        return input.nextLine();
     }
 
     //output string to console
@@ -29,6 +21,7 @@ public class Utils {
     }
 
     //output input box prompting user to enter some data
+    //TODO: add validation to reject empty strings
     public static String inputBox(String str) {
         return JOptionPane.showInputDialog(str);
     }

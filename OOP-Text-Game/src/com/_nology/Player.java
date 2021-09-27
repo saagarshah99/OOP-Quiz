@@ -1,7 +1,7 @@
 package com._nology;
 
 public class Player extends Quiz {
-    private String name;
+    private final String name;
     private int score = 0;
 
     public Player(String name) {
