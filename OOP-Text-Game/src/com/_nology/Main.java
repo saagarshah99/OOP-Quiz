@@ -1,9 +1,6 @@
 package com._nology;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -47,17 +44,23 @@ public class Main {
         else generateFailMsg(player.getScoreStr(), answer);
     }
 
-    //output "random" success message if given answer was correct (include score)
+    //generate success message from interface if given answer was correct (include score)
     public static void generateSuccessMsg(int newPoints, String scoreStr) {
-        String[] possibleMessages = {"Correct!", "Awesome!", "Sound as a pound!"};
-        String chosenMsg = possibleMessages[Utils.randomNumber(0, possibleMessages.length)];
-
         String points = newPoints != 1 ? " points" : " point";
-        Utils.messageBox(chosenMsg + " (+" + newPoints + points + ") \n" + scoreStr);
+
+        Utils.messageBox(
+            new SuccessMessage().getResponse() +
+            " (+" + newPoints + points + ") \n" +
+            scoreStr
+        );
     }
 
-    //output message if given answer was incorrect (include score)
+    //generate fail message from interface if given answer was incorrect (include score)
     public static void generateFailMsg(String scoreStr, String answer) {
-        Utils.messageBox("Incorrect! The correct answer was '" + answer + "'\n" + scoreStr);
+        Utils.messageBox(
+                new FailMessage().getResponse() +
+            " The correct answer was '" + answer + "'\n" +
+            scoreStr
+        );
     }
 }
