@@ -34,7 +34,6 @@ public class Main {
 
         Scoreboard scores = new Scoreboard();
         scores.updateScoreboardFile(player);
-        scores.printScoreboard(player);
     }
 
     //determine correctness of current question and update/return score (add points if corrects)

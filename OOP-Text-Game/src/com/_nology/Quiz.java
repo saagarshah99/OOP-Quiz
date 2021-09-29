@@ -27,17 +27,17 @@ public class Quiz {
                 "Nutella is produced by the German company Ferrero (True or False?)",
                 "True"
             },
-//            {
-//                "In computing terms, typically what does CLI stand for?",
-//                "Command Line Interface"
-//            },
-//            {"What is the capital of Chile?", "Santiago"},
-//            {
-//                "What is isobutylphenylpropanoic acid more commonly known as?",
-//                "Ibuprofen"
-//            },
-//            {"What is the highest mountain in the world?", "Everest"},
-//            {"How many people at _nology are left handed?", "2"}
+            {
+                "In computing terms, typically what does CLI stand for?",
+                "Command Line Interface"
+            },
+            {"What is the capital of Chile?", "Santiago"},
+            {
+                "What is isobutylphenylpropanoic acid more commonly known as?",
+                "Ibuprofen"
+            },
+            {"What is the highest mountain in the world?", "Everest"},
+            {"How many people at _nology are left handed?", "2"}
         };
     }
 }

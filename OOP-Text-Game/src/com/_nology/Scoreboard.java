@@ -58,6 +58,9 @@ public class Scoreboard extends Quiz {
 
         csvWriter.flush();
         csvWriter.close();
+
+        setScoreboardList();
+        printScoreboard(player);
     }
 
 
@@ -72,6 +75,7 @@ public class Scoreboard extends Quiz {
         for (int i = 0; i < scoreboard.size(); i++)
         {
             String currentRow = "";
+
             for (int j = 0; j < scoreboard.get(i).size(); j++)
             {
                 currentRow += printScoreboardRow(i, j);
@@ -99,7 +103,7 @@ public class Scoreboard extends Quiz {
                 currentRow = "\n" + currentValue + " (You): ";
             }
         }
-        else if(j == 1) {
+        else {
             currentRow += currentValue + (currentValue.equals(" 1") ? " point" : " points");
         }
 
