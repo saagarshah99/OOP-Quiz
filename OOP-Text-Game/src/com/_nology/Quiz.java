@@ -1,9 +1,17 @@
 package com._nology;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class Quiz {
     private final String[][] questions;
+    private int numberOfQuestions;
 
-    public Quiz() {
+    public Quiz(int numberOfQuestions) throws IOException {
+        this.numberOfQuestions = numberOfQuestions;
         this.questions = this.generateQuestions();
     }
 
@@ -11,33 +19,64 @@ public class Quiz {
         return this.questions;
     }
 
-    /*
-        TODO: fetch questions from API later
-            https://opentdb.com/api.php?amount=10
-            https://medium.com/swlh/getting-json-data-from-a-restful-api-using-java-b327aafb3751
+    //fetching questions from api and storing them in array
+    private String[][] generateQuestions() throws IOException {
+        String[][] questions = new String[this.numberOfQuestions][2];
 
-        TODO: use nested array to accept multiple possible answers
+        for(int i=0; i<questions.length; i++) {
+            String[] newQuestion = extractJSONQuestion();
 
-        TODO: could randomly generate array indexes and store them in an array to avoid duplicates
-         in order to select from a larger set of questions
-    */
-    private String[][] generateQuestions() {
-        return new String[][] {
-            {
-                "Nutella is produced by the German company Ferrero (True or False?)",
-                "True"
-            },
-            {
-                "In computing terms, typically what does CLI stand for?",
-                "Command Line Interface"
-            },
-            {"What is the capital of Chile?", "Santiago"},
-            {
-                "What is isobutylphenylpropanoic acid more commonly known as?",
-                "Ibuprofen"
-            },
-            {"What is the highest mountain in the world?", "Everest"},
-            {"How many people at _nology are left handed?", "2"}
+            questions[i][0] = newQuestion[0];
+            questions[i][1] = newQuestion[1];
+        }
+
+        return questions;
+    }
+
+    //removing unwanted characters from json data extracted from api
+    public static String cleanString(String str, String jsonKey) {
+        String[] sectionsToRemove = {"\"", ",", jsonKey};
+
+        for(int i=0; i<sectionsToRemove.length; i++) {
+            str = str.replace(sectionsToRemove[i], "");
+        }
+
+        str = str.replace("&quot;", "'");
+        return str;
+    }
+
+    //fetching questions from api https://www.baeldung.com/httpurlconnection-post
+    public String fetchJSONQuestions() throws IOException {
+        URL url = new URL("https://opentdb.com/api.php?amount=1");
+        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+
+        StringBuilder response = new StringBuilder();
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
+            String responseLine = null;
+
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+        }
+
+        return response.toString();
+    }
+
+    //extracting question and answer from json
+    public String[] extractJSONQuestion() throws IOException {
+        String jsonStr = fetchJSONQuestions();
+
+        return new String[] {
+            cleanString(
+                jsonStr.substring(
+                    jsonStr.indexOf("question"), jsonStr.indexOf("correct_answer")
+                ), "question:"),
+
+            cleanString(
+                jsonStr.substring(
+                    jsonStr.indexOf("correct_answer"), jsonStr.indexOf("incorrect_answers")
+                ), "correct_answer:"
+            )
         };
     }
 }

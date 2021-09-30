@@ -1,11 +1,13 @@
 package com._nology;
 
+import java.io.IOException;
+
 public class Player extends Quiz {
     private final String name;
     private int score = 0;
 
-    public Player(String name) {
-        super();
+    public Player(int numberOfQuestions, String name) throws IOException {
+        super(numberOfQuestions);
         this.name = name;
     }
 
