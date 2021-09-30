@@ -10,7 +10,7 @@ public class Main {
     //instantiating new player, receiving name as input, outputting welcome msg and starting game
     public static void setupQuiz() throws IOException {
         String name = Utils.inputBox("Enter your name...");
-        int numberOfQuestions = Integer.valueOf(Utils.inputBox("Welcome " + name + "! How many questions?"));
+        int numberOfQuestions = Integer.parseInt(Utils.inputBox("Welcome " + name + "! How many questions?"));
 
         Player player = new Player(numberOfQuestions, name);
         askQuestions(player);
@@ -28,14 +28,15 @@ public class Main {
             checkAnswer(inputAns, correctAnswer, player);
         }
 
-        new Scoreboard(0).updateScoreboardFile(player);
+        new Scoreboard(player.getNumberOfQuestions()).updateScoreboardFile(player);
     }
 
     //determine correctness of current question, generate random msg and update/return score
     public static void checkAnswer(String inputAns, String correctAnswer, Player player) {
         if(inputAns.equalsIgnoreCase(correctAnswer)) {
-            player.setScore(Utils.randomNumber(1, 5));
-            Utils.messageBox(new SuccessMessage(player).getResponse());
+            int newScore = Utils.randomNumber(1, 5);
+            player.setScore(newScore);
+            Utils.messageBox(new SuccessMessage(player, newScore).getResponse());
         }
         else {
             Utils.messageBox(new FailMessage(correctAnswer, player.getScoreStr()).getResponse());

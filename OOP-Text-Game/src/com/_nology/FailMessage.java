@@ -16,6 +16,6 @@ public class FailMessage implements GeneratedMessage {
     }
 
     public String getResponse() {
-        return this.generatedResponse + pointStr;
+        return this.generatedResponse + this.pointStr;
     }
 }
