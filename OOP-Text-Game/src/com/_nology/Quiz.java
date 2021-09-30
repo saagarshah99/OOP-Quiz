@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class Quiz {
     private final String[][] questions;
-    private int numberOfQuestions;
+    private final int numberOfQuestions;
 
     public Quiz(int numberOfQuestions) throws IOException {
         this.numberOfQuestions = numberOfQuestions;
@@ -27,7 +27,7 @@ public class Quiz {
     private String[][] generateQuestions() throws IOException {
         String[][] questions = new String[this.numberOfQuestions][2];
 
-        for(int i=0; i<questions.length; i++) {
+        for (int i = 0; i < questions.length; i++) {
             String[] newQuestion = extractJSONQuestion();
 
             questions[i][0] = newQuestion[0]; //question
@@ -41,7 +41,7 @@ public class Quiz {
     public static String cleanString(String str, String jsonKey) {
         String[] sectionsToRemove = {"\"", ",", jsonKey};
 
-        for(int i=0; i<sectionsToRemove.length; i++) {
+        for (int i = 0; i < sectionsToRemove.length; i++) {
             str = str.replace(sectionsToRemove[i], "");
         }
 
@@ -55,7 +55,7 @@ public class Quiz {
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
 
         StringBuilder response = new StringBuilder();
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
             String responseLine = null;
 
             while ((responseLine = br.readLine()) != null) {
