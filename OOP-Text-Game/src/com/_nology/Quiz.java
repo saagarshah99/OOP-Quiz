@@ -19,6 +19,10 @@ public class Quiz {
         return this.questions;
     }
 
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
     //fetching questions from api and storing them in array
     private String[][] generateQuestions() throws IOException {
         String[][] questions = new String[this.numberOfQuestions][2];
@@ -26,8 +30,8 @@ public class Quiz {
         for(int i=0; i<questions.length; i++) {
             String[] newQuestion = extractJSONQuestion();
 
-            questions[i][0] = newQuestion[0];
-            questions[i][1] = newQuestion[1];
+            questions[i][0] = newQuestion[0]; //question
+            questions[i][1] = newQuestion[1]; //answer
         }
 
         return questions;

@@ -10,10 +10,10 @@ public class SuccessMessage implements GeneratedMessage {
         "Sound as a pound!"
     };
 
-    public SuccessMessage(Player player) {
+    public SuccessMessage(Player player, int newScore) {
         this.generatedResponse = possibleMessages[Utils.randomNumber(0, possibleMessages.length)];
 
-        String points = " (+" + player.getScore() + (player.getScore() != 1 ? " points" : " point") + ")";
+        String points = " (+" + newScore + (newScore != 1 ? " points" : " point") + ")";
         this.pointStr = points + "\n" + player.getScoreStr();
     }
 
