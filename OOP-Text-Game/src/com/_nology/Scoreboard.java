@@ -11,7 +11,8 @@ import java.util.List;
 public class Scoreboard extends Quiz {
     private List<List<String>> scoreboardList = new ArrayList<>();
 
-    public Scoreboard() throws IOException {
+    public Scoreboard(int numberOfQuestions) throws IOException {
+        super(numberOfQuestions);
         this.scoreboardList = loadScoreboardFromFile();
     }
 

@@ -1,27 +1,22 @@
 package com._nology;
 
+import netscape.javascript.JSObject;
+
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        URLConnection connection = new URL("https://opentdb.com/api.php?amount=10").openConnection();
-//        connection.setRequestProperty("type", "header1");
-//        connection.setRequestProperty("header2", "header2");
-//
-//        //Get Response
-//        InputStream is = connection.getInputStream();
-//        System.out.println(connection.type);
-//        System.out.println(connection.getContentType());
-
         setupQuiz();
     }
 
     //instantiating new player, receiving name as input, outputting welcome msg and starting game
     public static void setupQuiz() throws IOException {
-        Player player = new Player(Utils.inputBox("Enter your name..."));
-        Utils.messageBox("Welcome " + player.getName() + "! Answer the following questions...");
+        String name = Utils.inputBox("Enter your name...");
+        int numberOfQuestions = Integer.valueOf(Utils.inputBox("Welcome " + name + "! How many questions?"));
+
+        Player player = new Player(numberOfQuestions, name);
         askQuestions(player);
     }
 
@@ -37,7 +32,7 @@ public class Main {
             checkAnswer(inputAns, correctAnswer, player);
         }
 
-        new Scoreboard().updateScoreboardFile(player);
+        new Scoreboard(0).updateScoreboardFile(player);
     }
 
     //determine correctness of current question, generate random msg and update/return score
