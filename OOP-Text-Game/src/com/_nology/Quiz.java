@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class Quiz {
     private final String[][] questions;
-    private int numberOfQuestions;
+    private final int numberOfQuestions;
 
     public Quiz(int numberOfQuestions) throws IOException {
         this.numberOfQuestions = numberOfQuestions;
@@ -25,13 +25,14 @@ public class Quiz {
 
     //fetching questions from api and storing them in array
     private String[][] generateQuestions() throws IOException {
-        String[][] questions = new String[this.numberOfQuestions][2];
+        String[][] questions = new String[this.numberOfQuestions][3];
 
-        for(int i=0; i<questions.length; i++) {
+        for (int i = 0; i < questions.length; i++) {
             String[] newQuestion = extractJSONQuestion();
 
             questions[i][0] = newQuestion[0]; //question
             questions[i][1] = newQuestion[1]; //answer
+            questions[i][2] = newQuestion[2]; //difficulty
         }
 
         return questions;
@@ -41,12 +42,20 @@ public class Quiz {
     public static String cleanString(String str, String jsonKey) {
         String[] sectionsToRemove = {"\"", ",", jsonKey};
 
-        for(int i=0; i<sectionsToRemove.length; i++) {
+        for (int i = 0; i < sectionsToRemove.length; i++) {
             str = str.replace(sectionsToRemove[i], "");
         }
 
         str = str.replace("&quot;", "'");
         return str;
+    }
+    public String cleanJSON(String jsonStr, String key1, String key2) {
+        return cleanString(
+            jsonStr.substring(
+                jsonStr.indexOf(key1),
+                jsonStr.indexOf(key2)
+            ), key1 + ":"
+        );
     }
 
     //fetching questions from api https://www.baeldung.com/httpurlconnection-post
@@ -55,7 +64,7 @@ public class Quiz {
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
 
         StringBuilder response = new StringBuilder();
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
             String responseLine = null;
 
             while ((responseLine = br.readLine()) != null) {
@@ -71,16 +80,9 @@ public class Quiz {
         String jsonStr = fetchJSONQuestions();
 
         return new String[] {
-            cleanString(
-                jsonStr.substring(
-                    jsonStr.indexOf("question"), jsonStr.indexOf("correct_answer")
-                ), "question:"),
-
-            cleanString(
-                jsonStr.substring(
-                    jsonStr.indexOf("correct_answer"), jsonStr.indexOf("incorrect_answers")
-                ), "correct_answer:"
-            )
+            cleanJSON(jsonStr, "question", "correct_answer"),
+            cleanJSON(jsonStr, "correct_answer", "incorrect_answers"),
+            cleanJSON(jsonStr, "difficulty", "question"), //TODO: option to choose difficulty
         };
     }
 }

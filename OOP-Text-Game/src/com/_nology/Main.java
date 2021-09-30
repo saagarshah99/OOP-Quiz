@@ -20,7 +20,7 @@ public class Main {
     public static void askQuestions(Player player) throws IOException {
         String[][] questions = player.getQuestions();
 
-        for (int i=0; i<questions.length; i++) {
+        for (int i = 0; i < questions.length; i++) {
             String question = "\n" + (i + 1) + ") " + questions[i][0];
             String inputAns = Utils.inputBox(question);
             String correctAnswer = questions[i][1];
@@ -28,12 +28,12 @@ public class Main {
             checkAnswer(inputAns, correctAnswer, player);
         }
 
-        new Scoreboard(player.getNumberOfQuestions()).updateScoreboardFile(player);
+        new Scoreboard().updateScoreboardFile(player);
     }
 
     //determine correctness of current question, generate random msg and update/return score
     public static void checkAnswer(String inputAns, String correctAnswer, Player player) {
-        if(inputAns.equalsIgnoreCase(correctAnswer)) {
+        if (inputAns.equalsIgnoreCase(correctAnswer)) {
             int newScore = Utils.randomNumber(1, 5);
             player.setScore(newScore);
             Utils.messageBox(new SuccessMessage(player, newScore).getResponse());

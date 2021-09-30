@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Scoreboard extends Quiz {
+public class Scoreboard {
     private List<List<String>> scoreboardList = new ArrayList<>();
 
-    public Scoreboard(int numberOfQuestions) throws IOException {
-        super(numberOfQuestions);
+    public Scoreboard() throws IOException {
         this.scoreboardList = loadScoreboardFromFile();
     }
 
@@ -96,11 +95,11 @@ public class Scoreboard extends Quiz {
 
         String currentRow = "";
         String currentValue = scoreboard.get(i).get(j);
-        if(j == 0) {
+        if (j == 0) {
             currentRow = currentValue + ": ";
 
             //make recent score stand out
-            if(i == scoreboard.size()-1) {
+            if (i == scoreboard.size()-1) {
                 currentRow = "\n" + currentValue + " (You): ";
             }
         }
