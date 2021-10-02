@@ -28,7 +28,7 @@ public class Main {
         for (int i = 0; i < questions.length; i++) {
             String question = "\n" + (i + 1) + ") " + questions[i][0];
 
-            String correctAnswer = questions[i][1];
+            String correctAnswer = questions[i][1].trim();
             String[] incorrectAnswers = questions[i][3].split(",");
 
             //placing all possible answers in array, random position for correct one
@@ -41,7 +41,7 @@ public class Main {
             else {
                 int randomIndex = Utils.randomNumber(0, choices.length - 1);
                 for(int j = 0; j < choices.length - 1; j++) {
-                    choices[j] = (j == randomIndex) ? correctAnswer : incorrectAnswers[j];
+                    choices[j] = (j == randomIndex) ? correctAnswer : incorrectAnswers[j].trim();
                 }
             }
 
