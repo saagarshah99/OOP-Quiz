@@ -1,6 +1,5 @@
 package com._nology;
 
-import javax.swing.*;
 import java.io.*;
 
 public class Main {
@@ -11,14 +10,13 @@ public class Main {
     //instantiating new player, receiving name as input, outputting welcome msg and starting game
     public static void setupQuiz() throws IOException {
         String name = Utils.inputBox("Enter your name...");
-        int numberOfQuestions = Integer.parseInt(Utils.inputBox("Welcome " + name + "! How many questions?"));
+        int numberOfQuestions = Integer.parseInt(
+            Utils.inputBox("Welcome " + name + "! How many questions?")
+        );
 
-        String pleaseWaitMsg = "Randomly selecting questions, please wait...";
-        System.out.println(pleaseWaitMsg);
-        Utils.messageBox(pleaseWaitMsg);
+        System.out.println("Randomly selecting questions, please wait...");
 
-        Player player = new Player(numberOfQuestions, name);
-        askQuestions(player);
+        askQuestions(new Player(numberOfQuestions, name));
     }
 
     //loop through to ask multiple choice questions, receive answers and output score throughout
@@ -28,36 +26,33 @@ public class Main {
         for (int i = 0; i < questions.length; i++) {
             String question = "\n" + (i + 1) + ") " + questions[i][0];
 
-            String correctAnswer = questions[i][1].trim();
+            String correctAnswer = questions[i][1];
             String[] incorrectAnswers = questions[i][3].split(",");
+            String[] choices = collectChoices(correctAnswer, incorrectAnswers);
 
-            //placing all possible answers in array, random position for correct one
-            String[] choices = new String[incorrectAnswers.length + 1];
-
-            if(correctAnswer.equalsIgnoreCase("true") || correctAnswer.equalsIgnoreCase("false")) {
-                choices[0] = "True";
-                choices[1] = "False";
-            }
-            else {
-                int randomIndex = Utils.randomNumber(0, choices.length - 1);
-                for(int j = 0; j < choices.length - 1; j++) {
-                    choices[j] = (j == randomIndex) ? correctAnswer : incorrectAnswers[j].trim();
-                }
-            }
-
-            String inputAns = (String) JOptionPane.showInputDialog(
-                null,
-                question,
-                "Please answer...",
-                JOptionPane.QUESTION_MESSAGE, null,
-                choices,
-                choices[0] //select question by default
-            );
-
+            String inputAns = Utils.inputChoice(question, choices);
             checkAnswer(inputAns, correctAnswer, player);
         }
 
         new Scoreboard().updateScoreboardFile(player);
+    }
+
+    //placing all possible answers in array, random position for correct one
+    public static String[] collectChoices(String correctAnswer, String[] incorrectAnswers) {
+        String[] choices = new String[incorrectAnswers.length + 1];
+
+        if(correctAnswer.equalsIgnoreCase("true") || correctAnswer.equalsIgnoreCase("false")) {
+            choices[0] = "True";
+            choices[1] = "False";
+        }
+        else {
+            int randomIndex = Utils.randomNumber(0, choices.length - 1);
+            for(int j = 0; j < choices.length - 1; j++) {
+                choices[j] = (j == randomIndex) ? correctAnswer : incorrectAnswers[j];
+            }
+        }
+
+        return choices;
     }
 
     //determine correctness of current question, generate random msg and update/return score
