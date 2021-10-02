@@ -2,8 +2,8 @@ package com._nology;
 
 //generating a random success message if the user answers correctly and returning updated score
 public class SuccessMessage implements GeneratedMessage {
-    private String pointStr;
-    private String generatedResponse;
+    private final String pointStr;
+    private final String generatedResponse;
     private final String[] possibleMessages = {
         "Correct!",
         "Awesome!",
@@ -11,7 +11,7 @@ public class SuccessMessage implements GeneratedMessage {
     };
 
     public SuccessMessage(Player player, int newScore) {
-        this.generatedResponse = possibleMessages[Utils.randomNumber(0, possibleMessages.length)];
+        this.generatedResponse = getMessage();
 
         String points = " (+" + newScore + (newScore != 1 ? " points" : " point") + ")";
         this.pointStr = points + "\n" + player.getScoreStr();
@@ -19,5 +19,9 @@ public class SuccessMessage implements GeneratedMessage {
 
     public String getResponse() {
         return this.generatedResponse + this.pointStr;
+    }
+
+    public String getMessage() {
+        return this.possibleMessages[Utils.randomNumber(0, possibleMessages.length)];
     }
 }
