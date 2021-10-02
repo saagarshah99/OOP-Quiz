@@ -22,7 +22,7 @@ public class Quiz {
 
     //fetching questions from api and storing them in array
     private String[][] generateQuestions() throws IOException {
-        String[][] questions = new String[this.numberOfQuestions][3];
+        String[][] questions = new String[this.numberOfQuestions][4];
 
         for (int i = 0; i < questions.length; i++) {
             String[] newQuestion = extractJSONQuestion();
@@ -30,11 +30,8 @@ public class Quiz {
             questions[i][0] = newQuestion[0]; //question
             questions[i][1] = newQuestion[1]; //answer
             questions[i][2] = newQuestion[2]; //difficulty
+            questions[i][3] = newQuestion[3]; //incorrect answers
         }
-
-        //ensuring I can answer one correctly for demo purposes
-        questions[questions.length-1][0] = "What does CLI typically stand for in computing?";
-        questions[questions.length-1][1] = "Command Line Interface";
 
         return questions;
     }
@@ -43,17 +40,21 @@ public class Quiz {
     public String cleanJSON(String jsonStr, String key1, String key2) {
         String sanitisedStr = jsonStr.substring(jsonStr.indexOf(key1), jsonStr.indexOf(key2));
 
-        for(String section : new String[] {"\"", ",", key1 + ":"}) {
+        String[] sectionsToRemove = {"\"", ",", key1 + ":"};
+
+        for(String section : sectionsToRemove) {
             sanitisedStr = sanitisedStr.replace(section, "");
         }
 
-        sanitisedStr = sanitisedStr.replace("&quot;", "'"); //quotations
+        for(String punctuation: new String[]{"&quot;", "&#039;"}) {
+            sanitisedStr = sanitisedStr.replace(punctuation, "'");
+        }
 
         return sanitisedStr;
     }
 
     //fetching questions from api https://www.baeldung.com/httpurlconnection-post
-    public String fetchJSONQuestions() throws IOException {
+    private String fetchJSONQuestions() throws IOException {
         URL url = new URL("https://opentdb.com/api.php?amount=1");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
 
@@ -71,39 +72,44 @@ public class Quiz {
     }
 
     //extracting question and answer from json
-    public String[] extractJSONQuestion() throws IOException {
+    private String[] extractJSONQuestion() throws IOException {
         String jsonStr = fetchJSONQuestions();
 
-        //rejecting multiple choice/boolean questions for now
-        String questionType = cleanJSON(jsonStr, "type", "difficulty");
-        if(!questionType.equals("multiple") || !questionType.equals("boolean")) {
-            return new String[] {
-                cleanJSON(jsonStr, "question", "correct_answer"),
-                cleanJSON(jsonStr, "correct_answer", "incorrect_answers"),
-                cleanJSON(jsonStr, "difficulty", "question"), //TODO: option to choose difficulty
-            };
-        }
-        else {
-            Utils.messageBox("wrong question type: " + questionType);
-            return extractJSONQuestion();
-        }
+        return new String[] {
+            cleanJSON(jsonStr, "question", "correct_answer"),
+            cleanJSON(jsonStr, "correct_answer", "incorrect_answers"),
+            cleanJSON(jsonStr, "difficulty", "question"), //TODO: option to choose difficulty
+            extractIncorrectAnswers(jsonStr)
+        };
     }
+
+    private String extractIncorrectAnswers(String jsonStr) {
+        String[] sectionsToRemove = {"incorrect_answers\":[", "}", "]", "\""};
+        String incorrect = jsonStr.substring(jsonStr.indexOf("incorrect_answers"));
+
+        for(String section : sectionsToRemove) {
+            incorrect = incorrect.replace(section, "");
+        }
+
+        incorrect = incorrect.replace("&#039;", "'");
+
+        return incorrect;
+    }
+    /*
+        Format of JSON Question:
+        {
+            "response_code":0,
+            "results": [
+                {
+                    "category": "History",
+                    "type": "multiple",
+                    "difficulty": "medium",
+                    "question": "What automatic assault rifle was developed in the Soviet Union in 1947?",
+                    "correct_answer":"AK-47",
+                    "incorrect_answers":["RPK","M16","MG 42"]
+                }
+            ]
+        }
+    */
+
 }
-
-
-/*
-    Format of JSON Question:
-    {
-        "response_code":0,
-        "results": [
-            {
-                "category": "History",
-                "type": "multiple",
-                "difficulty": "medium",
-                "question": "What automatic assault rifle was developed in the Soviet Union in 1947?",
-                "correct_answer":"AK-47",
-                "incorrect_answers":["RPK","M16","MG 42"]
-            }
-        ]
-    }
-*/
