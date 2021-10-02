@@ -60,16 +60,16 @@ public class Quiz {
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
 
         InputStreamReader isr = new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8.name());
-        StringBuilder response = new StringBuilder();
+        StringBuilder jsonStr = new StringBuilder();
         try (BufferedReader br = new BufferedReader(isr)) {
             String responseLine;
 
             while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+                jsonStr.append(responseLine.trim());
             }
         }
 
-        return response.toString();
+        return jsonStr.toString();
     }
 
     //extracting question and answer from json
@@ -83,5 +83,4 @@ public class Quiz {
             cleanJSON(jsonStr, "incorrect_answers", "]"),
         };
     }
-
 }

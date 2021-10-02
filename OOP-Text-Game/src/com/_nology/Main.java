@@ -1,10 +1,6 @@
 package com._nology;
 
-import jdk.jshell.execution.Util;
-
-import javax.swing.*;
 import java.io.*;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -14,11 +10,11 @@ public class Main {
     //instantiating new player, receiving name as input, outputting welcome msg and starting game
     public static void setupQuiz() throws IOException {
         String name = Utils.inputBox("Enter your name...");
-        int numberOfQuestions = Integer.parseInt(Utils.inputBox("Welcome " + name + "! How many questions?"));
+        int numberOfQuestions = Integer.parseInt(
+            Utils.inputBox("Welcome " + name + "! How many questions?")
+        );
 
-        String pleaseWaitMsg = "Randomly selecting questions, please wait...";
-        System.out.println(pleaseWaitMsg);
-        Utils.messageBox(pleaseWaitMsg);
+        System.out.println("Randomly selecting questions, please wait...");
 
         askQuestions(new Player(numberOfQuestions, name));
     }

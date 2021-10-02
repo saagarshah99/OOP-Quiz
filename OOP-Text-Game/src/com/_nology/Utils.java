@@ -6,8 +6,6 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Utils {
-
-    //generate random number within a given range
     public static int randomNumber(int min, int max) {
         return new Random().nextInt(max) + min;
     }
@@ -41,7 +39,7 @@ public class Utils {
         );
     }
 
-    //return a line break string for breaking out console output
+    //return a line break string for breaking up output
     public static String lineBreak() {
         return "\n*****************************************************\n";
     }
