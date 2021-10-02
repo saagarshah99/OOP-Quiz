@@ -10,11 +10,6 @@ public class Utils {
         return new Random().nextInt(max) + min;
     }
 
-    //output string to console
-    public static void print(String str) {
-        System.out.println(str);
-    }
-
     //output alert box with given message
     public static void messageBox(String str) {
         JOptionPane.showMessageDialog(null, str);

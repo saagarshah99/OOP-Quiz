@@ -12,6 +12,7 @@ public class Main {
         String name = Utils.inputBox("Enter your name...");
         int numberOfQuestions = Integer.parseInt(Utils.inputBox("Welcome " + name + "! How many questions?"));
 
+        Utils.messageBox("Randomly selecting questions, please wait...");
         Player player = new Player(numberOfQuestions, name);
         askQuestions(player);
     }
@@ -22,6 +23,7 @@ public class Main {
 
         for (int i = 0; i < questions.length; i++) {
             String question = "\n" + (i + 1) + ") " + questions[i][0];
+
             String inputAns = Utils.inputBox(question);
             String correctAnswer = questions[i][1];
 

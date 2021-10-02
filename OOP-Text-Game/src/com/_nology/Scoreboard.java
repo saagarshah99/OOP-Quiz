@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Scoreboard {
-    private List<List<String>> scoreboardList = new ArrayList<>();
+    private List<List<String>> scoreboardList;
 
     public Scoreboard() throws IOException {
         this.scoreboardList = loadScoreboardFromFile();
@@ -68,20 +68,19 @@ public class Scoreboard {
     /*************************OUTPUTTING SCORES*************************/
 
     //fetch updated scoreboard from file, loop through it and output it appropriately (end of quiz)
-    public void printScoreboard(Player player) throws IOException {
+    public void printScoreboard(Player player) {
         List<List<String>> scoreboard = getScoreboardList(); // [name, score]
 
-        String output = "\nSCOREBOARD:\n";
+        StringBuilder output = new StringBuilder().append("\nSCOREBOARD:\n");
         for (int i = 0; i < scoreboard.size(); i++)
         {
-            String currentRow = "";
-
+            StringBuilder currentRow = new StringBuilder();
             for (int j = 0; j < scoreboard.get(i).size(); j++)
             {
-                currentRow += printScoreboardRow(i, j);
+                currentRow.append(printScoreboardRow(i, j));
             }
 
-            output += currentRow + "\n";
+            output.append(currentRow.append("\n"));
         }
 
         Utils.messageBox(
@@ -90,7 +89,7 @@ public class Scoreboard {
         );
     }
 
-    public String printScoreboardRow(int i, int j) throws IOException {
+    public String printScoreboardRow(int i, int j) {
         List<List<String>> scoreboard = getScoreboardList();
 
         String currentRow = "";
