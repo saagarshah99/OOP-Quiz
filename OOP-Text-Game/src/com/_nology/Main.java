@@ -1,5 +1,6 @@
 package com._nology;
 
+import javax.swing.*;
 import java.io.*;
 
 public class Main {
@@ -17,15 +18,37 @@ public class Main {
         askQuestions(player);
     }
 
-    //loop through to ask questions, receive answers and output score throughout
+    //loop through to ask multiple choice questions, receive answers and output score throughout
     public static void askQuestions(Player player) throws IOException {
         String[][] questions = player.getQuestions();
 
         for (int i = 0; i < questions.length; i++) {
             String question = "\n" + (i + 1) + ") " + questions[i][0];
 
-            String inputAns = Utils.inputBox(question);
             String correctAnswer = questions[i][1];
+            String[] incorrectAnswers = questions[i][3].split(",");
+
+            //placing all possible answers in array, random position for correct one
+            String[] choices = new String[incorrectAnswers.length + 1];
+
+            if(correctAnswer.equalsIgnoreCase("True")) {
+                Utils.messageBox("we are true");
+            }
+            else {
+                int randomIndex = Utils.randomNumber(0, choices.length - 1);
+                for(int j = 0; j < choices.length - 1; j++) {
+                    choices[j] = (j == randomIndex) ? correctAnswer : incorrectAnswers[j];
+                }
+            }
+
+            String inputAns = (String) JOptionPane.showInputDialog(
+                null,
+                question,
+                "Please answer...",
+                JOptionPane.QUESTION_MESSAGE, null,
+                choices,
+                choices[0] //select question by default
+            );
 
             checkAnswer(inputAns, correctAnswer, player);
         }
