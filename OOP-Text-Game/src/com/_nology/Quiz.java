@@ -37,20 +37,21 @@ public class Quiz {
     }
 
     //removing unwanted characters from json question data extracted from api
-    public String cleanJSON(String jsonStr, String key1, String key2) {
+    private String cleanJSON(String jsonStr, String key1, String key2) {
         String sanitisedStr = jsonStr.substring(jsonStr.indexOf(key1), jsonStr.indexOf(key2));
 
-        String[] sectionsToRemove = {"\"", ",", key1 + ":"};
-
-        for(String section : sectionsToRemove) {
-            sanitisedStr = sanitisedStr.replace(section, "");
+        if(key1.equalsIgnoreCase("incorrect_answers")) {
+            for(String section : new String[] {"incorrect_answers\":[", "}", "]", "\""}) {
+                sanitisedStr = sanitisedStr.replace(section, "");
+            }
+        }
+        else {
+            for(String section : new String[] {"\"", ",", key1 + ":"}) {
+                sanitisedStr = sanitisedStr.replace(section, "");
+            }
         }
 
-        for(String punctuation: new String[]{"&quot;", "&#039;"}) {
-            sanitisedStr = sanitisedStr.replace(punctuation, "'");
-        }
-
-        return sanitisedStr;
+        return sanitisedStr.replace("&quot;", "'").replace("&#039;", "'").trim();
     }
 
     //fetching questions from api https://www.baeldung.com/httpurlconnection-post
@@ -79,37 +80,8 @@ public class Quiz {
             cleanJSON(jsonStr, "question", "correct_answer"),
             cleanJSON(jsonStr, "correct_answer", "incorrect_answers"),
             cleanJSON(jsonStr, "difficulty", "question"), //TODO: option to choose difficulty
-            extractIncorrectAnswers(jsonStr)
+            cleanJSON(jsonStr, "incorrect_answers", "]"),
         };
     }
-
-    private String extractIncorrectAnswers(String jsonStr) {
-        String[] sectionsToRemove = {"incorrect_answers\":[", "}", "]", "\""};
-        String incorrect = jsonStr.substring(jsonStr.indexOf("incorrect_answers"));
-
-        for(String section : sectionsToRemove) {
-            incorrect = incorrect.replace(section, "");
-        }
-
-        incorrect = incorrect.replace("&#039;", "'");
-
-        return incorrect;
-    }
-    /*
-        Format of JSON Question:
-        {
-            "response_code":0,
-            "results": [
-                {
-                    "category": "History",
-                    "type": "multiple",
-                    "difficulty": "medium",
-                    "question": "What automatic assault rifle was developed in the Soviet Union in 1947?",
-                    "correct_answer":"AK-47",
-                    "incorrect_answers":["RPK","M16","MG 42"]
-                }
-            ]
-        }
-    */
 
 }
