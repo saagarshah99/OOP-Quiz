@@ -46,7 +46,9 @@ public class Quiz {
             sanitisedStr = sanitisedStr.replace(section, "");
         }
 
-        sanitisedStr = sanitisedStr.replace("&quot;", "'"); //quotations
+        for(String punctuation: new String[]{"&quot;", "&#039;"}) {
+            sanitisedStr = sanitisedStr.replace(punctuation, "'");
+        }
 
         return sanitisedStr;
     }
@@ -88,6 +90,8 @@ public class Quiz {
         for(String section : sectionsToRemove) {
             incorrect = incorrect.replace(section, "");
         }
+
+        incorrect = incorrect.replace("&#039;", "'");
 
         return incorrect;
     }

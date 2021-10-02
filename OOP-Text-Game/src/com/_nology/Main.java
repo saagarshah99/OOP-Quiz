@@ -13,7 +13,10 @@ public class Main {
         String name = Utils.inputBox("Enter your name...");
         int numberOfQuestions = Integer.parseInt(Utils.inputBox("Welcome " + name + "! How many questions?"));
 
-        Utils.messageBox("Randomly selecting questions, please wait...");
+        String pleaseWaitMsg = "Randomly selecting questions, please wait...";
+        System.out.println(pleaseWaitMsg);
+        Utils.messageBox(pleaseWaitMsg);
+
         Player player = new Player(numberOfQuestions, name);
         askQuestions(player);
     }
@@ -31,8 +34,9 @@ public class Main {
             //placing all possible answers in array, random position for correct one
             String[] choices = new String[incorrectAnswers.length + 1];
 
-            if(correctAnswer.equalsIgnoreCase("True")) {
-                Utils.messageBox("we are true");
+            if(correctAnswer.equalsIgnoreCase("true") || correctAnswer.equalsIgnoreCase("false")) {
+                choices[0] = "True";
+                choices[1] = "False";
             }
             else {
                 int randomIndex = Utils.randomNumber(0, choices.length - 1);
